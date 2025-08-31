@@ -15,7 +15,7 @@
 
 ## ⚙️ نصب و اجرا
 
-### 1 کلون کردن پروژه
+ 1- کلون کردن پروژه
 ```bash
 git clone https://github.com/username/online-resume-builder.git
 cd online-resume-builder
