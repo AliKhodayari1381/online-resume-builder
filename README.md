@@ -52,7 +52,7 @@ python manage.py runserver
 online-resume-builder/
 │── manage.py
 │── requirements.txt
-│── app_name/
+│── resume/
 │   ├── models.py
 │   ├── views.py
 │   ├── templates/
