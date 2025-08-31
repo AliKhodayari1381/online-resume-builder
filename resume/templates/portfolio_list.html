@@ -1,0 +1,13 @@
+<!-- portfolio_list.html -->
+
+<h3>نمونه‌کارهای شما</h3>
+<ul class="list-group">
+    {% for portfolio in portfolios %}
+    <li class="list-group-item">
+        <h5>{{ portfolio.title }}</h5>
+        <p>{{ portfolio.description }}</p>
+    </li>
+    {% empty %}
+    <li class="list-group-item">هیچ نمونه‌کاری اضافه نشده است.</li>
+    {% endfor %}
+</ul>

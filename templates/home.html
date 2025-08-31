@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+{% load static %} 
+
+
+{% block content %}
+<!-- پروفایل شخصی -->
+<section id="profile" class="container py-5 main-section animate__animated animate__fadeIn">
+    <div class="row align-items-center">
+        <div class="col-md-4 text-center">
+            <img src="{% if profile.profile_image %}{{ profile.profile_image.url }}{% else %}{% static 'images/default-profile.jpg' %}{% endif %}" alt="{{ profile.full_name }}" class="img-fluid rounded-circle shadow-lg">
+        </div>
+        <div class="col-md-8 text-right">
+            <h1 class="display-4 text-primary">{{ profile.full_name }}</h1>
+            <p class="lead text-secondary">{{ profile.job_title }}</p>
+            <p>{{ profile.bio }}</p>
+            <div class="social-links mt-3">
+                {% if profile.linkedin %}
+                <a href="{{ profile.linkedin }}" target="_blank" class="btn btn-primary btn-lg mx-1">LinkedIn</a>
+                {% endif %}
+                {% if profile.github %}
+                <a href="{{ profile.github }}" target="_blank" class="btn btn-dark btn-lg mx-1">GitHub</a>
+                {% endif %}
+                {% if profile.twitter %}
+                <a href="{{ profile.twitter }}" target="_blank" class="btn btn-info btn-lg mx-1">Twitter</a>
+                {% endif %}
+                {% if profile.telegram %}
+                <a href="{{ profile.telegram }}" target="_blank" class="btn btn-success btn-lg mx-1">Telegram</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- مهارت‌ها -->
+<section id="skills" class="container py-5 main-section animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">مهارت‌ها</h2>
+    <ul class="list-group">
+        {% for skill in skills %}
+        <li class="list-group-item d-flex justify-content-between align-items-center text-right">
+            <span class="skill-name font-weight-bold">{{ skill.name }}</span>
+            <div class="progress-bar-container" style="flex: 1; margin-right: 15px;">
+                <div class="progress" style="width: 100%; height: 25px;">
+                    <div class="progress-bar" role="progressbar" style="width: {{ skill.level }}%;" aria-valuenow="{{ skill.level }}" aria-valuemin="0" aria-valuemax="100">
+                        {{ skill.level }}%
+                    </div>
+                </div>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
+<!-- تجربه‌ها -->
+<section id="experiences" class="container py-5 main-section animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">تجربیات کاری</h2>
+    <div class="row">
+        {% for experience in experiences %}
+        <div class="col-md-6 mb-4">
+            <div class="experience-card">
+                <h5>{{ experience.position }} - {{ experience.company_name }}</h5>
+                <p>{{ experience.description }}</p>
+                <small>{{ experience.start_date }} - {% if experience.end_date %}{{ experience.end_date }}{% else %}الان{% endif %}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- تحصیلات -->
+<section id="educations" class="container py-5 main-section animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">تحصیلات</h2>
+    <div class="row">
+        {% for education in educations %}
+        <div class="col-md-6 mb-4">
+            <div class="education-card">
+                <h5>{{ education.degree }} - {{ education.institution_name }}</h5>
+                <small>{{ education.start_date }} - {{ education.end_date }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- پورتفولیو -->
+<section id="portfolio" class="container py-5 main-section animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">نمونه کار ها</h2>
+    <div class="row">
+        {% for project in portfolios %}
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-lg">
+                {% if project.image %}
+                    <img src="{{ project.image.url }}" class="card-img-top" alt="{{ project.title }}">
+                {% else %}
+                    <img src="{% static 'images/default-image.jpg' %}" class="card-img-top" alt="تصویر پیش‌فرض">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ project.title }}</h5>
+                    <p class="card-text">{{ project.description }}</p>
+                    {% if project.link %}
+                    <a href="{{ project.link }}" target="_blank" class="btn btn-primary btn-block">مشاهده پروژه</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+<!-- فرم تماس -->
+<section id="contact" class="container py-5 main-section animate__animated animate__fadeInUp">
+    <h2 class="text-center mb-4">تماس با ما</h2>
+    <form method="POST" action="{% url 'contact' %}" class="shadow-lg p-4 rounded bg-white">
+        {% csrf_token %}
+        <div class="form-group">
+            <input type="text" name="name" placeholder="نام" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <input type="email" name="email" placeholder="ایمیل" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <textarea name="message" placeholder="پیام" class="form-control" rows="5" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-success btn-block btn-lg">ارسال</button>
+    </form>
+</section>
+{% endblock %}

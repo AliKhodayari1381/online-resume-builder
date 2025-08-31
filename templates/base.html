@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رزومه شخصی</title>
+    <!-- لینک به فونت‌ها -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- لینک به Bootstrap -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- لینک به استایل CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <!-- هدر سایت -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">رزومه من</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="#profile">درباره من</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#skills">مهارت‌ها</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#portfolio">نمونه کار ها</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#contact">تماس با من</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">صفحه اصلی</a></li>
+                        {% if user.is_authenticated %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}">داشبورد من</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">خروج</a></li>
+                        {% else %}
+                            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">ورود</a></li>
+                            <li class="nav-item"><a class="nav-link" href="{% url 'signup' %}">ثبت‌نام</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- محتوای صفحه -->
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- فوتر سایت -->
+    <footer>
+        <div class="container text-center py-4">
+            <p>طراحی شده توسط <a href="#" class="footer-link">علی خدایاری</a> | تمامی حقوق محفوظ است © 2024</p>
+        </div>
+    </footer>
+
+    <!-- اسکریپت‌های جاوااسکریپت -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

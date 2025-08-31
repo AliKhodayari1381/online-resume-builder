@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+    <h2 class="text-center mb-4">Dashboard</h2>
+
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Sidebar Navigation -->
+            <div class="list-group">
+                <a href="#profile" class="list-group-item list-group-item-action">پروفایل</a>
+                <a href="#skills" class="list-group-item list-group-item-action">مهارت‌ها</a>
+                <a href="#experience" class="list-group-item list-group-item-action">سوابق کاری</a>
+                <a href="#education" class="list-group-item list-group-item-action">سوابق تحصیلی</a>
+                <a href="#portfolio" class="list-group-item list-group-item-action">نمونه‌کارها</a>
+            </div>
+        </div>
+
+        <div class="col-md-9">
+            <!-- Profile Section -->
+            <section id="profile">
+                <h3>مدیریت پروفایل</h3>
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="full_name">نام کامل</label>
+                        <input type="text" id="full_name" name="full_name" class="form-control" value="{{ profile.full_name }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="job_title">عنوان شغلی</label>
+                        <input type="text" id="job_title" name="job_title" class="form-control" value="{{ profile.job_title }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bio">بیوگرافی</label>
+                        <textarea id="bio" name="bio" class="form-control" rows="3" required>{{ profile.bio }}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="profile_image">عکس پروفایل</label>
+                        <input type="file" id="profile_image" name="profile_image" class="form-control">
+                        {% if profile.profile_image %}
+                        <img src="{{ profile.profile_image.url }}" alt="Profile Image" class="img-fluid mt-3">
+                        {% endif %}
+                    </div>
+                    <div class="form-group">
+                        <label for="linkedin">LinkedIn</label>
+                        <input type="url" id="linkedin" name="linkedin" class="form-control" value="{{ profile.linkedin }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="github">GitHub</label>
+                        <input type="url" id="github" name="github" class="form-control" value="{{ profile.github }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="twitter">Twitter</label>
+                        <input type="url" id="twitter" name="twitter" class="form-control" value="{{ profile.twitter }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="telegram">Telegram</label>
+                        <input type="url" id="telegram" name="telegram" class="form-control" value="{{ profile.telegram }}">
+                    </div>
+                    <button type="submit" class="btn btn-primary">ذخیره تغییرات</button>
+                </form>
+            </section>
+
+            <hr>
+
+            <!-- Skills Section -->
+            <section id="skills">
+                <h3>مدیریت مهارت‌ها</h3>
+                <form method="POST" action="{% url 'add_skill' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="skill_name">نام مهارت</label>
+                        <input type="text" id="skill_name" name="skill_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="skill_level">سطح تسلط</label>
+                        <input type="number" id="skill_level" name="skill_level" class="form-control" min="0" max="100" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">اضافه کردن مهارت</button>
+                </form>
+
+                <hr>
+
+                <h4>مهارت‌های موجود</h4>
+                <ul class="list-group">
+                    {% for skill in skills %}
+                    <li class="list-group-item">
+                        {{ skill.name }} - {{ skill.level }}%
+                        <a href="{% url 'edit_skill' skill.id %}" class="btn btn-sm btn-warning ml-2">ویرایش</a>
+                        <a href="{% url 'delete_skill' skill.id %}" class="btn btn-sm btn-danger ml-2">حذف</a>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">هیچ مهارتی اضافه نشده است.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <hr>
+
+            <!-- Experience Section -->
+            <section id="experience">
+                <h3>مدیریت سوابق کاری</h3>
+                <form method="POST" action="{% url 'add_experience' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="company_name">نام شرکت</label>
+                        <input type="text" id="company_name" name="company_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="position">عنوان شغلی</label>
+                        <input type="text" id="position" name="position" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">تاریخ شروع</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">تاریخ پایان</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">توضیحات</label>
+                        <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">اضافه کردن تجربه کاری</button>
+                </form>
+
+                <hr>
+
+                <h4>تجربیات کاری موجود</h4>
+                <ul class="list-group">
+                    {% for experience in experiences %}
+                    <li class="list-group-item">
+                        <strong>{{ experience.position }}</strong> at {{ experience.company_name }} <br>
+                        <small>{{ experience.start_date }} - {{ experience.end_date|default:"Present" }}</small>
+                        <a href="{% url 'edit_experience' experience.id %}" class="btn btn-sm btn-warning ml-2">ویرایش</a>
+                        <a href="{% url 'delete_experience' experience.id %}" class="btn btn-sm btn-danger ml-2">حذف</a>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">هیچ تجربه کاری اضافه نشده است.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <hr>
+
+            <!-- Education Section -->
+            <section id="education">
+                <h3>مدیریت سوابق تحصیلی</h3>
+                <form method="POST" action="{% url 'add_education' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="institution_name">نام موسسه</label>
+                        <input type="text" id="institution_name" name="institution_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="degree">مدرک تحصیلی</label>
+                        <input type="text" id="degree" name="degree" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="start_date">تاریخ شروع</label>
+                        <input type="date" id="start_date" name="start_date" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">تاریخ پایان</label>
+                        <input type="date" id="end_date" name="end_date" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary">اضافه کردن سابقه تحصیلی</button>
+                </form>
+
+                <hr>
+
+                <h4>سوابق تحصیلی موجود</h4>
+                <ul class="list-group">
+                    {% for education in educations %}
+                    <li class="list-group-item">
+                        <strong>{{ education.degree }}</strong> from {{ education.institution_name }} <br>
+                        <small>{{ education.start_date }} - {{ education.end_date }}</small>
+                        <a href="{% url 'edit_education' education.id %}" class="btn btn-sm btn-warning ml-2">ویرایش</a>
+                        <a href="{% url 'delete_education' education.id %}" class="btn btn-sm btn-danger ml-2">حذف</a>
+                    </li>
+                    {% empty %}
+                    <li class="list-group-item">هیچ سابقه تحصیلی اضافه نشده است.</li>
+                    {% endfor %}
+                </ul>
+            </section>
+
+            <hr>
+
+            <!-- Portfolio Section -->
+<section id="portfolio">
+    <h3>مدیریت نمونه‌کارها</h3>
+    <form method="POST" action="{% url 'add_portfolio' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="title">عنوان پروژه</label>
+            <input type="text" id="title" name="title" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="description">توضیحات پروژه</label>
+            <textarea id="description" name="description" class="form-control" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">تصویر پروژه</label>
+            <input type="file" id="image" name="image" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="link">لینک پروژه (اختیاری)</label>
+            <input type="url" id="link" name="link" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">اضافه کردن نمونه‌کار</button>
+    </form>
+
+    <hr>
+
+    <h4>نمونه‌کارهای موجود</h4>
+    <div class="row">
+        {% for portfolio in portfolios %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <!-- بررسی وجود تصویر -->
+                {% if portfolio.image %}
+                <img src="{{ portfolio.image.url }}" class="card-img-top" alt="{{ portfolio.title }}">
+                {% else %}
+                <!-- تصویر پیش‌فرض در صورت عدم وجود تصویر -->
+                <img src="path/to/default/image.jpg" class="card-img-top" alt="تصویر پیش‌فرض">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ portfolio.title }}</h5>
+                    <p class="card-text">{{ portfolio.description }}</p>
+                    {% if portfolio.link %}
+                    <a href="{{ portfolio.link }}" class="btn btn-primary" target="_blank">مشاهده پروژه</a>
+                    {% endif %}
+                    
+                    <!-- دکمه حذف نمونه‌کار -->
+                    <form method="POST" action="{% url 'delete_portfolio' portfolio.id %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm ml-2">حذف</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>هیچ نمونه‌کاری اضافه نشده است.</p>
+        {% endfor %}
+    </div>
+</section>
+<hr>
+
+            <!-- دکمه برای مشاهده رزومه شخصی -->
+            {% if profile.full_name and profile.job_title and profile.bio %}
+                <a href="{% url 'view_personal_resume' %}" class="btn btn-success mt-3">مشاهده رزومه شخصی</a>
+            {% else %}
+                <p>رزومه شخصی شما تکمیل نشده است. لطفاً اطلاعات خود را وارد کنید.</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
